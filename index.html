@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>DETTYVERSE — Private Cultural Universe</title>
+  <meta name="description" content="A private cinematic publication. Photography. Film. Journal. Membership." />
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            void: '#050505',
+            night: '#0a0a0a',
+            charcoal: '#111111',
+            smoke: '#1a1a1a',
+            ash: '#2a2a2a',
+            crimson: '#8B0000',
+            blood: '#6B0000',
+            ruby: '#C41E3A',
+            ember: '#A52A2A',
+            bone: '#E8E0D5',
+            parchment: '#D4C8B8',
+            muted: '#8A8070',
+            soft: '#B8A99A'
+          },
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif']
+          },
+          letterSpacing: {
+            'ultra': '0.25em',
+            'wide': '0.15em'
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+<body class="bg-void text-bone font-sans antialiased overflow-x-hidden">
+  <!-- Ambient grain overlay -->
+  <div class="grain" aria-hidden="true"></div>
+  
+  <!-- Red ambient glow -->
+  <div class="ambient-glow" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+    <div class="max-w-[1400px] mx-auto px-5 md:px-8 h-16 md:h-20 flex items-center justify-between">
+      <a href="#/" class="nav-logo group" data-nav="home">
+        <span class="font-display tracking-ultra text-xs md:text-sm uppercase text-bone/90 group-hover:text-ruby transition-colors duration-300">DETTYVERSE</span>
+      </a>
+      
+      <div class="hidden md:flex items-center gap-8 lg:gap-10">
+        <a href="#/archive" class="nav-link" data-nav="archive">Archive</a>
+        <a href="#/photography" class="nav-link" data-nav="photography">Photography</a>
+        <a href="#/film" class="nav-link" data-nav="film">Film</a>
+        <a href="#/journal" class="nav-link" data-nav="journal">Journal</a>
+        <a href="#/store" class="nav-link" data-nav="store">Store</a>
+        <a href="#/about" class="nav-link" data-nav="about">About</a>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <button id="member-status-btn" class="hidden md:flex items-center gap-2 text-xs tracking-wide uppercase text-muted hover:text-ruby transition-colors">
+          <span id="member-status-text">Enter</span>
+        </button>
+        <a href="#/membership" class="membership-cta hidden sm:inline-flex">
+          <span>Membership</span>
+        </a>
+        <button id="mobile-menu-btn" class="md:hidden w-10 h-10 flex items-center justify-center text-bone/80 hover:text-ruby transition-colors" aria-label="Menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="fixed inset-0 z-[60] bg-void/98 backdrop-blur-xl translate-x-full transition-transform duration-500 ease-out">
+    <div class="flex flex-col h-full pt-24 px-8 pb-12">
+      <button id="mobile-close" class="absolute top-6 right-6 w-10 h-10 flex items-center justify-center text-bone/60 hover:text-ruby" aria-label="Close">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+      <nav class="flex flex-col gap-6">
+        <a href="#/" class="mobile-nav-link" data-nav="home">Home</a>
+        <a href="#/archive" class="mobile-nav-link" data-nav="archive">Archive</a>
+        <a href="#/photography" class="mobile-nav-link" data-nav="photography">Photography</a>
+        <a href="#/film" class="mobile-nav-link" data-nav="film">Film</a>
+        <a href="#/journal" class="mobile-nav-link" data-nav="journal">Journal</a>
+        <a href="#/store" class="mobile-nav-link" data-nav="store">Store</a>
+        <a href="#/about" class="mobile-nav-link" data-nav="about">About</a>
+        <a href="#/membership" class="mobile-nav-link text-ruby" data-nav="membership">Membership — $99.99</a>
+        <a href="#/dashboard" class="mobile-nav-link" data-nav="dashboard">Member Area</a>
+        <a href="#/admin" class="mobile-nav-link text-muted text-sm" data-nav="admin">Admin</a>
+      </nav>
+      <div class="mt-auto pt-8 border-t border-ash/50">
+        <p class="text-xs text-muted tracking-wide uppercase mb-2">Status</p>
+        <p id="mobile-member-status" class="font-serif text-lg text-bone/80">Visitor</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main id="app" class="min-h-screen pt-16 md:pt-20">
+    <!-- Routes inject here -->
+  </main>
+
+  <!-- Footer -->
+  <footer id="main-footer" class="border-t border-ash/40 mt-24">
+    <div class="max-w-[1400px] mx-auto px-5 md:px-8 py-16 md:py-20">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
+        <div class="md:col-span-2">
+          <p class="font-display tracking-ultra text-sm uppercase text-bone/70 mb-4">DETTYVERSE</p>
+          <p class="font-serif text-xl md:text-2xl text-bone/60 leading-relaxed max-w-md">
+            A private cultural universe.<br/>
+            Photography. Film. Journal.<br/>
+            For those who know.
+          </p>
+        </div>
+        <div>
+          <p class="text-xs tracking-wide uppercase text-muted mb-4">Navigate</p>
+          <ul class="space-y-2 text-sm text-soft/70">
+            <li><a href="#/archive" class="hover:text-ruby transition-colors">Archive</a></li>
+            <li><a href="#/photography" class="hover:text-ruby transition-colors">Photography</a></li>
+            <li><a href="#/film" class="hover:text-ruby transition-colors">Film</a></li>
+            <li><a href="#/journal" class="hover:text-ruby transition-colors">Journal</a></li>
+            <li><a href="#/store" class="hover:text-ruby transition-colors">Store</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-xs tracking-wide uppercase text-muted mb-4">Access</p>
+          <ul class="space-y-2 text-sm text-soft/70">
+            <li><a href="#/membership" class="hover:text-ruby transition-colors">Membership</a></li>
+            <li><a href="#/dashboard" class="hover:text-ruby transition-colors">Member Dashboard</a></li>
+            <li><a href="#/about" class="hover:text-ruby transition-colors">Creator</a></li>
+            <li><a href="#/admin" class="hover:text-ruby transition-colors">Admin</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="mt-16 pt-8 border-t border-ash/30 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <p class="text-xs text-muted tracking-wide">© 2026 DETTYVERSE. Private publication.</p>
+        <p class="text-xs text-muted/60">Prototype — Frontend only. Auth & payments simulated.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Auth Modal -->
+  <div id="auth-modal" class="fixed inset-0 z-[70] hidden">
+    <div class="absolute inset-0 bg-void/90 backdrop-blur-md" id="auth-backdrop"></div>
+    <div class="relative h-full flex items-center justify-center p-5">
+      <div class="w-full max-w-md bg-charcoal border border-ash/60 p-8 md:p-10 relative">
+        <button id="auth-close" class="absolute top-4 right-4 text-muted hover:text-bone" aria-label="Close">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <div id="auth-content">
+          <!-- Dynamic -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[80] hidden">
+    <div class="bg-charcoal border border-ash px-6 py-3 text-sm text-bone/90 tracking-wide shadow-2xl">
+      <span id="toast-message"></span>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
