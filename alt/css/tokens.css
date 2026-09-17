@@ -1,0 +1,69 @@
+/* ============================================
+   DETTYVERSE — DESIGN TOKENS
+   ============================================ */
+
+:root {
+  /* Color */
+  --black: #0A0A0B;
+  --surface: #141416;
+  --surface-raised: #1C1C1F;
+  --surface-line: #29292C;
+  --crimson: #8B1220;
+  --crimson-deep: #5C0C16;
+  --signal-red: #C4102A;
+  --ivory: #E8E3DA;
+  --ivory-dim: #B8B2A6;
+  --muted: #6B6560;
+  --muted-dark: #45423F;
+
+  /* Type */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Type scale */
+  --text-xs: 0.6875rem;
+  --text-sm: 0.8125rem;
+  --text-base: 1rem;
+  --text-md: 1.25rem;
+  --text-lg: 1.75rem;
+  --text-xl: 2.5rem;
+  --text-2xl: 3.5rem;
+  --text-3xl: 5rem;
+  --text-4xl: 7rem;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2.5rem;
+  --space-6: 4rem;
+  --space-7: 6rem;
+  --space-8: 9rem;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 180ms;
+  --dur-med: 420ms;
+  --dur-slow: 900ms;
+
+  /* Effects */
+  --glow-crimson: 0 0 40px rgba(139, 18, 32, 0.35);
+  --glow-red-soft: 0 0 80px rgba(196, 16, 42, 0.12);
+  --radius-sm: 2px;
+  --radius-md: 3px;
+
+  /* Layout */
+  --edge: clamp(1.25rem, 4vw, 4rem);
+  --max-width: 1680px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
