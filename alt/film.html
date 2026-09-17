@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Film — DETTYVERSE</title>
+<meta name="description" content="Short films, documentary and visual studies from DETTYVERSE." />
+<link rel="canonical" href="https://dettyverse.example/film.html" />
+<link rel="icon" href="data:," />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/components.css" />
+<style>
+  body { font-family: 'Inter', var(--font-body); }
+  h1, h2, h3, h4, .nav__wordmark, .site-footer__brand { font-family: 'Fraunces', var(--font-display); }
+  .page-head { padding: calc(var(--space-8) + 2rem) 0 var(--space-6); }
+  .page-head__title { font-size: clamp(2.5rem, 6vw, var(--text-3xl)); margin-bottom: var(--space-3); }
+  .page-head__desc { color: var(--ivory-dim); max-width: 56ch; font-size: var(--text-md); line-height: 1.6; }
+
+  /* Featured film hero-strip */
+  .film-hero {
+    position: relative;
+    aspect-ratio: 21/9;
+    overflow: hidden;
+    margin-bottom: var(--space-7);
+    cursor: pointer;
+  }
+  .film-hero img { width: 100%; height: 100%; object-fit: cover; opacity: 0.75; }
+  .film-hero::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,10,11,0.9), rgba(10,10,11,0.15) 60%);
+  }
+  .film-hero__content {
+    position: absolute; bottom: var(--space-5); left: var(--space-5); right: var(--space-5);
+    z-index: 1;
+    display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap;
+  }
+  .film-hero__play {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    border: 1px solid rgba(232,227,218,0.5);
+    display: flex; align-items: center; justify-content: center;
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    z-index: 1;
+    transition: all var(--dur-fast) var(--ease-out);
+    background: rgba(10,10,11,0.3);
+  }
+  .film-hero:hover .film-hero__play { border-color: var(--signal-red); box-shadow: var(--glow-crimson); }
+  .film-hero__title { font-size: clamp(1.75rem, 4vw, var(--text-2xl)); }
+  .film-hero__meta { font-size: var(--text-sm); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ivory-dim); margin-top: var(--space-2); }
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<div id="dv-nav"></div>
+
+<main id="main">
+  <div class="container page-head">
+    <div class="meta-label">Film</div>
+    <h1 class="page-head__title">Short Films & Studies</h1>
+    <p class="page-head__desc">Documentary, short film and visual studies — some released publicly, others reserved for the private archive.</p>
+  </div>
+
+  <div class="container">
+    <a class="film-hero" id="filmHeroLink">
+      <img id="filmHeroImg" src="" alt="" />
+      <div class="film-hero__play">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--ivory)"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+      <div class="film-hero__content">
+        <div>
+          <div class="film-hero__title" id="filmHeroTitle"></div>
+          <div class="film-hero__meta" id="filmHeroMeta"></div>
+        </div>
+        <span class="badge badge--new">Featured</span>
+      </div>
+    </a>
+
+    <div class="section-head">
+      <h2 class="section-head__title">The Full Reel</h2>
+    </div>
+    <div class="film-grid" id="filmGrid" style="margin-bottom: var(--space-8);"></div>
+  </div>
+</main>
+
+<div id="dv-footer"></div>
+
+<script src="js/gate.js"></script>
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/app.js"></script>
+<script>
+  const featuredFilm = DV.films[2]; // "After Midnight"
+  const locked = featuredFilm.visibility === "members" && !DVAuth.isMember();
+  document.getElementById("filmHeroImg").src = featuredFilm.thumb;
+  document.getElementById("filmHeroTitle").textContent = locked ? "Private Film" : featuredFilm.title;
+  document.getElementById("filmHeroMeta").textContent = locked
+    ? "Join to watch"
+    : `${featuredFilm.category} · ${featuredFilm.duration} · ${featuredFilm.date}`;
+  document.getElementById("filmHeroLink").href = locked
+    ? "membership.html"
+    : `content.html?type=film&id=${featuredFilm.id}`;
+  if (locked) document.getElementById("filmHeroImg").style.filter = "blur(20px) brightness(0.5)";
+
+  const filmGrid = document.getElementById("filmGrid");
+  filmGrid.innerHTML = DV.films.map(f => DVApp.filmCardHtml(f)).join("");
+</script>
+</body>
+</html>

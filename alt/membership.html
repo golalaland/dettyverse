@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Membership — DETTYVERSE</title>
+<meta name="description" content="Join DETTYVERSE — $99.99 a month for full access to the private archive: exclusive photography, film, stories and new releases." />
+<link rel="canonical" href="https://dettyverse.example/membership.html" />
+<link rel="icon" href="data:," />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/components.css" />
+<style>
+  body { font-family: 'Inter', var(--font-body); }
+  h1, h2, h3, h4, .nav__wordmark, .site-footer__brand { font-family: 'Fraunces', var(--font-display); }
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<div id="dv-nav"></div>
+
+<main id="main">
+
+  <section class="membership-hero">
+    <div class="membership-hero__bg">
+      <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=1920" alt="" />
+    </div>
+    <div class="membership-hero__content">
+      <div class="meta-label membership-hero__eyebrow">The Private Archive</div>
+      <h1 class="membership-hero__title">Come inside.</h1>
+      <p class="membership-hero__sub">Membership unlocks the rest of DETTYVERSE — the photography, film and writing that never left the private archive. This is not a subscription. It's access.</p>
+      <div class="membership-hero__price">$99.99 <span>/ 1 Month</span></div>
+      <button class="btn btn--primary" id="ctaTop">Enter the Verse</button>
+    </div>
+  </section>
+
+  <div class="container">
+
+    <div class="includes-grid">
+      <div class="includes-item">
+        <div class="includes-item__num">01</div>
+        <h4>Private Photography</h4>
+        <p>Full-resolution frames from every series — including the work never released publicly.</p>
+      </div>
+      <div class="includes-item">
+        <div class="includes-item__num">02</div>
+        <h4>Exclusive Film</h4>
+        <p>Short films, documentary pieces and visual studies, released to members first — some, only.</p>
+      </div>
+      <div class="includes-item">
+        <div class="includes-item__num">03</div>
+        <h4>Private Stories</h4>
+        <p>Journal entries kept out of the public record. The more specific, less filtered writing.</p>
+      </div>
+      <div class="includes-item">
+        <div class="includes-item__num">04</div>
+        <h4>New Releases</h4>
+        <p>Members see new work first — often the only place it appears at all.</p>
+      </div>
+      <div class="includes-item">
+        <div class="includes-item__num">05</div>
+        <h4>Personal Archives</h4>
+        <p>Full series and collections, not just the single frames that make it to the public archive.</p>
+      </div>
+      <div class="includes-item">
+        <div class="includes-item__num">06</div>
+        <h4>Behind the Work</h4>
+        <p>Notes, context and unused material from the private process.</p>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <h2 class="section-head__title">A Glimpse Inside</h2>
+    </div>
+    <div class="preview-strip" id="previewStrip" style="margin-bottom: var(--space-7);"></div>
+
+    <div class="membership-cta-block">
+      <div class="meta-label membership-cta-block__label">Membership</div>
+      <div class="membership-cta-block__price">$99.99 <span>/ 1 Month</span></div>
+      <button class="btn btn--primary btn--full" id="ctaBottom">Unlock the Verse</button>
+      <div class="membership-cta-block__note">Cancel anytime. Billed monthly. TODO(backend): connect to Stripe Billing or similar.</div>
+    </div>
+
+  </div>
+</main>
+
+<div id="dv-footer"></div>
+
+<script src="js/gate.js"></script>
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/app.js"></script>
+<script>
+  // Blurred previews of private material — tasteful, not explicit
+  const previews = DV.photos.filter(p => p.visibility === "members").slice(0, 4);
+  document.getElementById("previewStrip").innerHTML = previews.map(p => `
+    <div class="media-card media-card--locked" style="aspect-ratio: 3/4;">
+      <div class="media-card__img-wrap"><img src="${p.img}" alt="" /></div>
+      <div class="media-card__lock">
+        <svg class="media-card__lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="5" y="11" width="14" height="9" rx="1"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        <span class="media-card__lock-text">Members Only</span>
+      </div>
+    </div>
+  `).join("");
+
+  function handleJoin() {
+    if (!DVAuth.isSignedIn()) {
+      window.location.href = "signin.html?next=checkout.html";
+      return;
+    }
+    window.location.href = "checkout.html";
+  }
+  document.getElementById("ctaTop").addEventListener("click", handleJoin);
+  document.getElementById("ctaBottom").addEventListener("click", handleJoin);
+
+  if (DVAuth.isMember()) {
+    document.querySelectorAll("#ctaTop, #ctaBottom").forEach(btn => {
+      btn.textContent = "You're a Member — Go to Dashboard";
+      btn.addEventListener("click", () => window.location.href = "dashboard.html");
+    });
+  }
+</script>
+</body>
+</html>

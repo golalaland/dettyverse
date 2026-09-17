@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My Room — DETTYVERSE</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" href="data:," />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/components.css" />
+<style>
+  body { font-family: 'Inter', var(--font-body); }
+  h1, h2, h3, h4, .nav__wordmark, .site-footer__brand { font-family: 'Fraunces', var(--font-display); }
+</style>
+</head>
+<body>
+<div id="dv-nav"></div>
+
+<main>
+  <div class="container" id="dashRoot"></div>
+</main>
+
+<div id="dv-footer"></div>
+
+<script src="js/gate.js"></script>
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/app.js"></script>
+<script>
+  if (!DVAuth.isSignedIn()) {
+    window.location.href = "signin.html?next=dashboard.html";
+  }
+
+  const session = DVAuth.getSession();
+  const isMember = DVAuth.isMember();
+  const root = document.getElementById("dashRoot");
+  const params = new URLSearchParams(window.location.search);
+
+  if (isMember) {
+    root.innerHTML = `
+      <div class="dash-hero">
+        <div class="meta-label dash-hero__eyebrow">${params.get("welcome") ? "Welcome" : "The Verse"}</div>
+        <h1 class="dash-hero__title">Welcome to the Verse.</h1>
+        <p class="dash-hero__member">Signed in as <strong>${session.email}</strong> · Member since ${new Date(session.membership.start).toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'})}</p>
+      </div>
+
+      <div class="dash-tiles">
+        <a href="archive.html" class="dash-tile">
+          <div class="dash-tile__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--crimson)" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg></div>
+          <div class="dash-tile__title">Private Archive</div>
+          <div class="dash-tile__sub">All photography, unlocked</div>
+        </a>
+        <a href="film.html" class="dash-tile">
+          <div class="dash-tile__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--crimson)" stroke-width="1.3"><rect x="2" y="5" width="20" height="14" rx="1"/><path d="M7 5v14M17 5v14M2 10h5M2 14h5M17 10h5M17 14h5"/></svg></div>
+          <div class="dash-tile__title">Exclusive Film</div>
+          <div class="dash-tile__sub">Full reel, unlocked</div>
+        </a>
+        <a href="journal.html" class="dash-tile">
+          <div class="dash-tile__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--crimson)" stroke-width="1.3"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15z"/></svg></div>
+          <div class="dash-tile__title">Private Stories</div>
+          <div class="dash-tile__sub">The unfiltered entries</div>
+        </a>
+        <a href="store.html" class="dash-tile">
+          <div class="dash-tile__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--crimson)" stroke-width="1.3"><path d="M6 2l1.5 5h9L18 2M3 7h18l-1.5 13.5a2 2 0 0 1-2 1.5H6.5a2 2 0 0 1-2-1.5L3 7z"/></svg></div>
+          <div class="dash-tile__title">New Releases</div>
+          <div class="dash-tile__sub">Latest to the store</div>
+        </a>
+      </div>
+
+      <div class="section-head"><h2 class="section-head__title">My Account</h2></div>
+      <div class="account-panel">
+        <div class="account-row"><span class="account-row__label">Email</span><span class="account-row__value">${session.email}</span></div>
+        <div class="account-row"><span class="account-row__label">Plan</span><span class="account-row__value">${session.membership.plan}</span></div>
+        <div class="account-row"><span class="account-row__label">Status</span><span class="account-row__value">Active</span></div>
+        <div class="account-row"><span class="account-row__label">Renews</span><span class="account-row__value">${new Date(session.membership.expiry).toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'})}</span></div>
+        <div class="account-row"><span class="account-row__label">Payment ID</span><span class="account-row__value" style="font-family:monospace;font-size:0.8rem;">${session.membership.paymentId}</span></div>
+      </div>
+      <button class="btn btn--ghost" id="cancelBtn" style="margin-bottom: var(--space-8);">Cancel Membership</button>
+    `;
+    document.getElementById("cancelBtn").addEventListener("click", () => {
+      if (confirm("Cancel your DettyVerse membership? You'll keep access until the end of the current billing period in a real implementation. In this prototype, access ends immediately.")) {
+        DVAuth.cancelMembership();
+        DVApp.toast("Membership cancelled");
+        setTimeout(() => window.location.reload(), 800);
+      }
+    });
+  } else {
+    root.innerHTML = `
+      <div class="dash-hero">
+        <div class="meta-label dash-hero__eyebrow">Account</div>
+        <h1 class="dash-hero__title">Welcome back.</h1>
+        <p class="dash-hero__member">Signed in as <strong>${session.email}</strong></p>
+      </div>
+      <div class="locked-room" style="min-height: 50vh; margin-bottom: var(--space-8);">
+        <div class="locked-room__bg"><img src="https://images.unsplash.com/photo-1483118714900-540cf339fd46?q=80&w=1600" alt="" /></div>
+        <div class="locked-room__content">
+          <svg class="locked-room__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="5" y="11" width="14" height="9" rx="1"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          <div class="locked-room__eyebrow">Not Yet a Member</div>
+          <h2 class="locked-room__title">You're signed in, but not inside.</h2>
+          <p class="locked-room__desc">Become a member to unlock the private archive, exclusive film and members-only stories.</p>
+          <div class="locked-room__price">$99.99 <span>/ 1 Month</span></div>
+          <a href="membership.html" class="btn btn--primary">Become a Member</a>
+        </div>
+      </div>
+    `;
+  }
+</script>
+</body>
+</html>

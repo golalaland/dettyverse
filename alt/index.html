@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DETTYVERSE — The Private Archive</title>
+<meta name="description" content="DETTYVERSE is a private, members-only archive of photography, film and personal writing. Images, film, stories — after dark." />
+<meta property="og:title" content="DETTYVERSE — The Private Archive" />
+<meta property="og:description" content="A private world of images, film and stories." />
+<meta property="og:image" content="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?q=80&w=1600" />
+<link rel="canonical" href="https://dettyverse.example/" />
+<link rel="icon" href="data:," />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/components.css" />
+<style>
+  body { font-family: 'Inter', var(--font-body); }
+  h1, h2, h3, h4, .nav__wordmark, .hero__wordmark, .site-footer__brand { font-family: 'Fraunces', var(--font-display); }
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<div id="dv-nav"></div>
+
+<main id="main">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__bg">
+      <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?q=80&w=1920" alt="" />
+    </div>
+    <div class="hero__content">
+      <div class="hero__eyebrow">The Private Archive</div>
+      <h1 class="hero__wordmark">DETTYVERSE</h1>
+      <p class="hero__tagline">Images. Film. Stories. After dark.</p>
+      <div class="hero__ctas">
+        <a href="archive.html" class="btn btn--primary">Enter the Verse</a>
+        <a href="membership.html" class="btn btn--ghost">Become a Member — $99.99</a>
+      </div>
+    </div>
+    <div class="hero__scroll"></div>
+  </section>
+
+  <!-- FEATURED VISUAL -->
+  <div class="container">
+    <a href="content.html?type=story&id=s01" class="featured-visual" style="display:block;">
+      <img src="https://images.unsplash.com/photo-1483118714900-540cf339fd46?q=80&w=1920" alt="Red Room, Marseille" />
+      <div class="featured-visual__caption">
+        <div class="featured-visual__eyebrow">Editorial · 2026</div>
+        <div class="featured-visual__title">On Collecting Nights</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- LATEST FROM THE ARCHIVE -->
+  <section class="section section--tight">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-head__title">Latest From the Archive</h2>
+        <a href="archive.html" class="section-head__link">View Full Archive</a>
+      </div>
+      <div class="masonry-grid" id="homeArchiveGrid"></div>
+    </div>
+  </section>
+
+  <!-- FEATURED STORY -->
+  <section class="section section--tight">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-head__title">From the Journal</h2>
+        <a href="journal.html" class="section-head__link">Read More</a>
+      </div>
+      <a href="content.html?type=story&id=s01" class="story-featured">
+        <div class="story-featured__img-wrap">
+          <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?q=80&w=1200" alt="On Collecting Nights" />
+        </div>
+        <div>
+          <div class="meta-label">Thoughts · September 2026</div>
+          <h3 class="story-featured__title">On Collecting Nights</h3>
+          <p class="story-featured__excerpt">There is a difference between remembering a night and keeping it. This is an attempt to explain the difference, and why the archive exists at all.</p>
+          <span class="btn btn--ghost">Read the Entry</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- FILM -->
+  <section class="section section--tight">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-head__title">Film</h2>
+        <a href="film.html" class="section-head__link">Watch the Full Reel</a>
+      </div>
+      <div class="film-grid" id="homeFilmGrid"></div>
+    </div>
+  </section>
+
+  <!-- THE PRIVATE ROOM -->
+  <section class="private-room">
+    <div class="private-room__glow"></div>
+    <div class="private-room__content">
+      <div class="private-room__eyebrow">The Private Room</div>
+      <h2 class="private-room__title">Some things are better kept private.</h2>
+      <p class="private-room__desc">Behind the public archive is a much larger world — unreleased photography, private film, and writing that never left the room it was written in. Membership is the only way in.</p>
+      <div class="private-room__price">$99.99 <span>/ 1 Month</span></div>
+      <a href="membership.html" class="btn btn--primary">Become a Member</a>
+    </div>
+  </section>
+
+  <!-- CREATOR STATEMENT -->
+  <section class="container">
+    <div class="statement">
+      <div class="statement__img">
+        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1200" alt="The creator" />
+      </div>
+      <div>
+        <div class="meta-label" style="margin-bottom: var(--space-3);">A Note From the Archive</div>
+        <h2 class="statement__title">I collect things worth remembering.</h2>
+        <div class="statement__body">
+          <p>Images, mostly. Sometimes film. Occasionally a few hundred words written too late at night to be fully trusted.</p>
+          <p>DETTYVERSE is where all of it lives — the work I publish openly, and the work I've chosen to keep for the people who bother to come inside.</p>
+        </div>
+        <a href="about.html" class="btn btn--ghost" style="margin-top: var(--space-4);">Read the Full Statement</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL VISUAL / SIGNOFF -->
+  <section class="signoff">
+    <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=1920" alt="" />
+    <div class="signoff__content">
+      <div class="signoff__word">DETTYVERSE</div>
+      <div class="signoff__line">See You After Dark.</div>
+    </div>
+  </section>
+
+</main>
+
+<div id="dv-footer"></div>
+
+<script src="js/gate.js"></script>
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/app.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const archiveGrid = document.getElementById("homeArchiveGrid");
+    const featured = DV.photos.slice(0, 8);
+    archiveGrid.innerHTML = featured.map(p => DVApp.photoCardHtml(p)).join("");
+
+    const filmGrid = document.getElementById("homeFilmGrid");
+    filmGrid.innerHTML = DV.films.slice(0, 3).map(f => DVApp.filmCardHtml(f)).join("");
+  });
+</script>
+</body>
+</html>

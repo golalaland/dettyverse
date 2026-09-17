@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Stories — DETTYVERSE</title>
+<meta name="description" content="Personal writing, visual diaries and long-form stories from DETTYVERSE." />
+<link rel="canonical" href="https://dettyverse.example/stories.html" />
+<link rel="icon" href="data:," />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/components.css" />
+<style>
+  body { font-family: 'Inter', var(--font-body); }
+  h1, h2, h3, h4, .nav__wordmark, .site-footer__brand { font-family: 'Fraunces', var(--font-display); }
+  .page-head { padding: calc(var(--space-8) + 2rem) 0 var(--space-6); }
+  .page-head__title { font-size: clamp(2.5rem, 6vw, var(--text-3xl)); margin-bottom: var(--space-3); }
+  .page-head__desc { color: var(--ivory-dim); max-width: 56ch; font-size: var(--text-md); line-height: 1.6; }
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<div id="dv-nav"></div>
+
+<main id="main">
+  <div class="container page-head">
+    <div class="meta-label">Stories</div>
+    <h1 class="page-head__title">Places, People & Nights</h1>
+    <p class="page-head__desc">Short, specific stories pulled from the archive — some public, some kept for members only.</p>
+  </div>
+
+  <div class="container">
+    <div class="filter-bar" id="filterBar">
+      <button data-filter="all" class="is-active">All Stories</button>
+      <button data-filter="Places">Places</button>
+      <button data-filter="People">People</button>
+      <button data-filter="Nights">Nights</button>
+      <button data-filter="Thoughts">Thoughts</button>
+      <button data-filter="Discoveries">Discoveries</button>
+    </div>
+    <div class="story-grid" id="storyGrid" style="margin-bottom: var(--space-8);"></div>
+  </div>
+</main>
+
+<div id="dv-footer"></div>
+
+<script src="js/gate.js"></script>
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/app.js"></script>
+<script>
+  const grid = document.getElementById("storyGrid");
+  const filterBar = document.getElementById("filterBar");
+  let activeFilter = "all";
+
+  function render() {
+    const items = activeFilter === "all" ? DV.stories : DV.stories.filter(s => s.category === activeFilter);
+    grid.innerHTML = items.map(s => DVApp.storyCardHtml(s)).join("");
+  }
+
+  filterBar.addEventListener("click", (e) => {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    filterBar.querySelectorAll("button").forEach(b => b.classList.remove("is-active"));
+    btn.classList.add("is-active");
+    activeFilter = btn.dataset.filter;
+    render();
+  });
+
+  render();
+</script>
+</body>
+</html>

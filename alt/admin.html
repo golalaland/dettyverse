@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Creator Dashboard — DETTYVERSE</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" href="data:," />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/components.css" />
+<style>
+  body { font-family: 'Inter', var(--font-body); }
+  h1, h2, h3, h4 { font-family: 'Fraunces', var(--font-display); }
+</style>
+</head>
+<body>
+
+<!--
+  TODO(backend): This entire admin surface must sit behind real
+  creator-only authentication and authorization (not the mock
+  member session used elsewhere in this prototype). All data below
+  is static/mock. Wire each table to real CRUD endpoints, and make
+  sure publish/unpublish/visibility toggles are enforced server-side
+  wherever protected media is served.
+-->
+
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <a href="index.html" class="admin-sidebar__brand">DETTYVERSE</a>
+    <nav class="admin-nav" id="adminNav">
+      <button data-panel="overview" class="is-active">Overview</button>
+      <button data-panel="photos">Photos</button>
+      <button data-panel="film">Film</button>
+      <button data-panel="stories">Stories</button>
+      <button data-panel="products">Store</button>
+      <button data-panel="members">Members</button>
+    </nav>
+    <a href="index.html" class="admin-sidebar__back">← Back to Site</a>
+  </aside>
+
+  <div class="admin-main">
+
+    <!-- OVERVIEW -->
+    <section class="admin-panel is-active" id="panel-overview">
+      <div class="admin-header"><h1>Overview</h1></div>
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-card__label">Total Members</div>
+          <div class="stat-card__value">1,204</div>
+          <div class="stat-card__delta stat-card__delta--up">+38 this month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__label">Active Memberships</div>
+          <div class="stat-card__value">1,142</div>
+          <div class="stat-card__delta">94.9% retention</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__label">Monthly Revenue</div>
+          <div class="stat-card__value">$114,182</div>
+          <div class="stat-card__delta stat-card__delta--up">+6.2% vs last month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__label">Store Revenue</div>
+          <div class="stat-card__value">$8,940</div>
+          <div class="stat-card__delta">142 purchases</div>
+        </div>
+      </div>
+
+      <div class="section-head"><h2 class="section-head__title" style="font-size: var(--text-md);">Recent Members</h2></div>
+      <table class="admin-table" style="margin-bottom: var(--space-6);">
+        <thead><tr><th>Member</th><th>Joined</th><th>Plan</th><th>Status</th></tr></thead>
+        <tbody id="recentMembersBody"></tbody>
+      </table>
+
+      <div class="section-head"><h2 class="section-head__title" style="font-size: var(--text-md);">Recent Purchases</h2></div>
+      <table class="admin-table">
+        <thead><tr><th>Item</th><th>Buyer</th><th>Date</th><th>Amount</th></tr></thead>
+        <tbody id="recentPurchasesBody"></tbody>
+      </table>
+    </section>
+
+    <!-- PHOTOS -->
+    <section class="admin-panel" id="panel-photos">
+      <div class="admin-header">
+        <h1>Photos</h1>
+        <button class="btn btn--primary" data-new="photo">New Photo</button>
+      </div>
+      <table class="admin-table">
+        <thead><tr><th></th><th>Title</th><th>Category</th><th>Visibility</th><th>Date</th><th></th></tr></thead>
+        <tbody id="photosBody"></tbody>
+      </table>
+    </section>
+
+    <!-- FILM -->
+    <section class="admin-panel" id="panel-film">
+      <div class="admin-header">
+        <h1>Film</h1>
+        <button class="btn btn--primary" data-new="video">New Video</button>
+      </div>
+      <table class="admin-table">
+        <thead><tr><th></th><th>Title</th><th>Category</th><th>Duration</th><th>Visibility</th><th></th></tr></thead>
+        <tbody id="filmBody"></tbody>
+      </table>
+    </section>
+
+    <!-- STORIES -->
+    <section class="admin-panel" id="panel-stories">
+      <div class="admin-header">
+        <h1>Stories</h1>
+        <button class="btn btn--primary" data-new="story">New Story</button>
+      </div>
+      <table class="admin-table">
+        <thead><tr><th></th><th>Title</th><th>Category</th><th>Visibility</th><th>Date</th><th></th></tr></thead>
+        <tbody id="storiesBody"></tbody>
+      </table>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section class="admin-panel" id="panel-products">
+      <div class="admin-header">
+        <h1>Store</h1>
+        <button class="btn btn--primary" data-new="product">New Product</button>
+      </div>
+      <table class="admin-table">
+        <thead><tr><th></th><th>Title</th><th>Type</th><th>Price</th><th></th></tr></thead>
+        <tbody id="productsBody"></tbody>
+      </table>
+    </section>
+
+    <!-- MEMBERS -->
+    <section class="admin-panel" id="panel-members">
+      <div class="admin-header"><h1>Members</h1></div>
+      <table class="admin-table">
+        <thead><tr><th>Member</th><th>Email</th><th>Joined</th><th>Expiry</th><th>Status</th></tr></thead>
+        <tbody id="allMembersBody"></tbody>
+      </table>
+    </section>
+
+  </div>
+</div>
+
+<script src="js/gate.js"></script>
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script>
+  // ---------- Tab switching ----------
+  const navBtns = document.querySelectorAll("#adminNav button");
+  navBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      navBtns.forEach(b => b.classList.remove("is-active"));
+      btn.classList.add("is-active");
+      document.querySelectorAll(".admin-panel").forEach(p => p.classList.remove("is-active"));
+      document.getElementById(`panel-${btn.dataset.panel}`).classList.add("is-active");
+    });
+  });
+
+  // ---------- Mock members / purchases ----------
+  const mockMembers = [
+    { name: "R. Okafor", email: "r.okafor@example.com", joined: "Sep 14, 2026", expiry: "Oct 14, 2026", status: "Active" },
+    { name: "T. Winters", email: "t.winters@example.com", joined: "Sep 12, 2026", expiry: "Oct 12, 2026", status: "Active" },
+    { name: "M. Delacroix", email: "m.delacroix@example.com", joined: "Sep 9, 2026", expiry: "Oct 9, 2026", status: "Active" },
+    { name: "J. Park", email: "j.park@example.com", joined: "Sep 3, 2026", expiry: "Sep 20, 2026", status: "Cancelled" },
+    { name: "A. Moreau", email: "a.moreau@example.com", joined: "Aug 29, 2026", expiry: "Sep 29, 2026", status: "Active" },
+    { name: "S. Adeyemi", email: "s.adeyemi@example.com", joined: "Aug 21, 2026", expiry: "Sep 21, 2026", status: "Active" },
+  ];
+  const mockPurchases = [
+    { item: "The Private Archive, Vol. I", buyer: "R. Okafor", date: "Sep 15, 2026", amount: "$68" },
+    { item: "Night Seven — Collection", buyer: "T. Winters", date: "Sep 14, 2026", amount: "$42" },
+    { item: "Red Light — Grade & Preset Pack", buyer: "M. Delacroix", date: "Sep 13, 2026", amount: "$24" },
+    { item: "Nightlife — Full Archive", buyer: "A. Moreau", date: "Sep 11, 2026", amount: "$89" },
+  ];
+
+  document.getElementById("recentMembersBody").innerHTML = mockMembers.slice(0,5).map(m => `
+    <tr><td>${m.name}</td><td>${m.joined}</td><td>$99.99 / mo</td><td><span class="admin-status ${m.status === 'Active' ? 'admin-status--members' : 'admin-status--public'}">${m.status}</span></td></tr>
+  `).join("");
+
+  document.getElementById("recentPurchasesBody").innerHTML = mockPurchases.map(p => `
+    <tr><td>${p.item}</td><td>${p.buyer}</td><td>${p.date}</td><td>${p.amount}</td></tr>
+  `).join("");
+
+  document.getElementById("allMembersBody").innerHTML = mockMembers.map(m => `
+    <tr><td>${m.name}</td><td>${m.email}</td><td>${m.joined}</td><td>${m.expiry}</td><td><span class="admin-status ${m.status === 'Active' ? 'admin-status--members' : 'admin-status--public'}">${m.status}</span></td></tr>
+  `).join("");
+
+  // ---------- Content tables ----------
+  function statusBadge(vis) {
+    return `<span class="admin-status ${vis === 'members' ? 'admin-status--members' : 'admin-status--public'}">${vis === 'members' ? 'Members' : 'Public'}</span>`;
+  }
+  function rowActions(kind, id) {
+    return `
+      <div class="admin-row-actions">
+        <button data-action="edit" data-kind="${kind}" data-id="${id}">Edit</button>
+        <button data-action="toggle" data-kind="${kind}" data-id="${id}">Toggle</button>
+        <button data-action="feature" data-kind="${kind}" data-id="${id}">Feature</button>
+        <button data-action="delete" data-kind="${kind}" data-id="${id}">Delete</button>
+      </div>
+    `;
+  }
+
+  document.getElementById("photosBody").innerHTML = DV.photos.map(p => `
+    <tr data-id="${p.id}">
+      <td><img class="admin-table__thumb" src="${p.img}" alt="" /></td>
+      <td>${p.title}</td>
+      <td>${p.category}</td>
+      <td>${statusBadge(p.visibility)}</td>
+      <td>${p.date}</td>
+      <td>${rowActions('photo', p.id)}</td>
+    </tr>
+  `).join("");
+
+  document.getElementById("filmBody").innerHTML = DV.films.map(f => `
+    <tr data-id="${f.id}">
+      <td><img class="admin-table__thumb" src="${f.thumb}" alt="" /></td>
+      <td>${f.title}</td>
+      <td>${f.category}</td>
+      <td>${f.duration}</td>
+      <td>${statusBadge(f.visibility)}</td>
+      <td>${rowActions('film', f.id)}</td>
+    </tr>
+  `).join("");
+
+  document.getElementById("storiesBody").innerHTML = DV.stories.map(s => `
+    <tr data-id="${s.id}">
+      <td><img class="admin-table__thumb" src="${s.cover}" alt="" /></td>
+      <td>${s.title}</td>
+      <td>${s.category}</td>
+      <td>${statusBadge(s.visibility)}</td>
+      <td>${s.date}</td>
+      <td>${rowActions('story', s.id)}</td>
+    </tr>
+  `).join("");
+
+  document.getElementById("productsBody").innerHTML = DV.products.map(p => `
+    <tr data-id="${p.id}">
+      <td><img class="admin-table__thumb" src="${p.cover}" alt="" /></td>
+      <td>${p.title}</td>
+      <td>${p.type}</td>
+      <td>$${p.price}</td>
+      <td>${rowActions('product', p.id)}</td>
+    </tr>
+  `).join("");
+
+  // ---------- Simulated row actions ----------
+  document.querySelector(".admin-main").addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-action]");
+    if (btn) {
+      const action = btn.dataset.action;
+      const kind = btn.dataset.kind;
+      const messages = {
+        edit: `Editing ${kind} — opens editor (not wired in prototype)`,
+        toggle: `Visibility toggled for ${kind}`,
+        feature: `${kind} marked as featured`,
+        delete: `${kind} deleted (simulated)`,
+      };
+      DVApp.toast(messages[action] || "Action simulated");
+      if (action === "delete") {
+        btn.closest("tr").style.opacity = "0.3";
+      }
+      return;
+    }
+    const newBtn = e.target.closest("button[data-new]");
+    if (newBtn) {
+      DVApp.toast(`New ${newBtn.dataset.new} — opens editor (not wired in prototype)`);
+    }
+  });
+</script>
+</body>
+</html>

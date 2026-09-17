@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Store — DETTYVERSE</title>
+<meta name="description" content="Digital collections, editions and releases from DETTYVERSE." />
+<link rel="canonical" href="https://dettyverse.example/store.html" />
+<link rel="icon" href="data:," />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/components.css" />
+<style>
+  body { font-family: 'Inter', var(--font-body); }
+  h1, h2, h3, h4, .nav__wordmark, .site-footer__brand { font-family: 'Fraunces', var(--font-display); }
+  .page-head { padding: calc(var(--space-8) + 2rem) 0 var(--space-6); }
+  .page-head__title { font-size: clamp(2.5rem, 6vw, var(--text-3xl)); margin-bottom: var(--space-3); }
+  .page-head__desc { color: var(--ivory-dim); max-width: 56ch; font-size: var(--text-md); line-height: 1.6; }
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<div id="dv-nav"></div>
+
+<main id="main">
+  <div class="container page-head">
+    <div class="meta-label">Store</div>
+    <h1 class="page-head__title">Digital Releases</h1>
+    <p class="page-head__desc">Standalone collections, editions and downloads — separate from membership, priced and sold individually.</p>
+  </div>
+
+  <div class="container">
+    <div class="product-grid" id="productGrid" style="margin-bottom: var(--space-8);"></div>
+  </div>
+</main>
+
+<div id="dv-footer"></div>
+
+<script src="js/gate.js"></script>
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/app.js"></script>
+<script>
+  document.getElementById("productGrid").innerHTML = DV.products.map(p => `
+    <a class="product-card" href="product.html?id=${p.id}">
+      <div class="product-card__img"><img src="${p.cover}" alt="${p.title}" loading="lazy" /></div>
+      <div class="meta-label product-card__type">${p.type}</div>
+      <div class="product-card__title">${p.title}</div>
+      <div class="product-card__price">$${p.price}</div>
+    </a>
+  `).join("");
+</script>
+</body>
+</html>

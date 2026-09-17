@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Journal — DETTYVERSE</title>
+<meta name="description" content="The DETTYVERSE journal — long-form writing, presented as a running personal record." />
+<link rel="canonical" href="https://dettyverse.example/journal.html" />
+<link rel="icon" href="data:," />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/components.css" />
+<style>
+  body { font-family: 'Inter', var(--font-body); }
+  h1, h2, h3, h4, .nav__wordmark, .site-footer__brand { font-family: 'Fraunces', var(--font-display); }
+  .page-head { padding: calc(var(--space-8) + 2rem) 0 var(--space-6); }
+  .page-head__title { font-size: clamp(2.5rem, 6vw, var(--text-3xl)); margin-bottom: var(--space-3); }
+  .page-head__desc { color: var(--ivory-dim); max-width: 56ch; font-size: var(--text-md); line-height: 1.6; }
+
+  .journal-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .journal-row {
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    gap: var(--space-5);
+    align-items: center;
+    padding: var(--space-5) 0;
+    border-top: 1px solid var(--surface-line);
+    transition: opacity var(--dur-fast);
+  }
+  .journal-row:last-child { border-bottom: 1px solid var(--surface-line); }
+  .journal-row:hover { opacity: 0.75; }
+  .journal-row__thumb { width: 120px; aspect-ratio: 4/5; overflow: hidden; }
+  .journal-row__thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .journal-row__title { font-size: var(--text-lg); margin-bottom: var(--space-1); }
+  .journal-row__excerpt { color: var(--ivory-dim); font-size: var(--text-sm); max-width: 60ch; }
+  .journal-row__meta { text-align: right; white-space: nowrap; }
+
+  @media (max-width: 700px) {
+    .journal-row { grid-template-columns: 80px 1fr; }
+    .journal-row__thumb { width: 80px; }
+    .journal-row__meta { grid-column: 1 / -1; text-align: left; }
+  }
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<div id="dv-nav"></div>
+
+<main id="main">
+  <div class="container page-head">
+    <div class="meta-label">Journal</div>
+    <h1 class="page-head__title">The Running Record</h1>
+    <p class="page-head__desc">Entries in the order they were written. Some are public. The rest are for members.</p>
+  </div>
+
+  <div class="container">
+    <a href="content.html?type=story&id=s01" class="story-featured" style="margin-bottom: var(--space-7);">
+      <div class="story-featured__img-wrap">
+        <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?q=80&w=1200" alt="On Collecting Nights" />
+      </div>
+      <div>
+        <div class="meta-label">Latest Entry · September 2026</div>
+        <h2 class="story-featured__title">On Collecting Nights</h2>
+        <p class="story-featured__excerpt">There is a difference between remembering a night and keeping it. This is an attempt to explain the difference, and why the archive exists at all.</p>
+        <span class="btn btn--ghost">Read the Entry</span>
+      </div>
+    </a>
+
+    <div class="journal-list" id="journalList"></div>
+    <div style="height: var(--space-8);"></div>
+  </div>
+</main>
+
+<div id="dv-footer"></div>
+
+<script src="js/gate.js"></script>
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/app.js"></script>
+<script>
+  const list = document.getElementById("journalList");
+  list.innerHTML = DV.stories.map(s => {
+    const locked = s.visibility === "members" && !DVAuth.isMember();
+    return `
+      <a class="journal-row" href="${locked ? 'membership.html' : `content.html?type=story&id=${s.id}`}">
+        <div class="journal-row__thumb">
+          <img src="${s.cover}" alt="" style="${locked ? 'filter:blur(10px) brightness(0.5);' : ''}" />
+        </div>
+        <div>
+          <div class="journal-row__title">${locked ? 'Private Entry' : s.title}</div>
+          <div class="journal-row__excerpt">${locked ? 'This entry is reserved for members.' : s.excerpt}</div>
+        </div>
+        <div class="journal-row__meta">
+          ${DVApp.visibilityBadge(s)}
+          <div class="meta-label" style="margin-top:6px;">${s.date}</div>
+        </div>
+      </a>
+    `;
+  }).join("");
+</script>
+</body>
+</html>
