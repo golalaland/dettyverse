@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -91,15 +91,25 @@
       border-bottom: 1px solid var(--border);
     }
 
-    .logo-link {
-      display: block;
-      line-height: 0;
-    }
-    .logo-link img {
-      height: 28px;
-      width: auto;
-      display: block;
-    }
+  .logo-link {
+  display: block;
+  line-height: 0;
+}
+
+.logo-link img {
+  height: 42px;
+  width: auto;
+  max-width: 260px;
+  display: block;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .logo-link img {
+    height: 34px;
+    max-width: 210px;
+  }
+}
 
     nav {
       display: flex;
