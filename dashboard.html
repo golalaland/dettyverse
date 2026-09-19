@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Verse — DETTYVERSE</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23060607'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23FF0844'/%3E%3C/svg%3E" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/components.css" />
+<style>
+  body { font-family: 'Inter', var(--font-body); }
+  h1, h2, h3, h4 { font-family: 'Fraunces', var(--font-display); }
+
+  .backroom-head {
+    padding: calc(var(--space-6) + 3rem) 0 var(--space-5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+  .backroom-head__logo { height: 24px; filter: drop-shadow(0 0 18px rgba(255,8,68,0.35)); }
+  .backroom-head__tag { font-size: var(--text-xs); letter-spacing: 0.16em; text-transform: uppercase; color: var(--glow-4); text-shadow: 0 0 10px rgba(255,8,68,0.4); }
+
+  .account-menu { position: relative; }
+  .account-menu__trigger {
+    font-size: var(--text-sm); letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--ivory-dim); border: 1px solid var(--surface-line); padding: var(--space-2) var(--space-3);
+    transition: border-color var(--dur-fast);
+  }
+  .account-menu__trigger:hover { border-color: var(--brand); color: var(--ivory); }
+  .account-menu__panel {
+    position: absolute; top: calc(100% + 8px); right: 0;
+    background: var(--surface-raised); border: 1px solid var(--surface-line);
+    padding: var(--space-4); width: 260px; z-index: 20;
+    display: none;
+  }
+  .account-menu__panel.is-open { display: block; }
+  .account-menu__row { display: flex; justify-content: space-between; padding: var(--space-2) 0; font-size: var(--text-xs); color: var(--ivory-dim); border-bottom: 1px solid var(--surface-line); }
+  .account-menu__row:last-of-type { border-bottom: none; }
+  .account-menu__row span:last-child { color: var(--ivory); }
+  .account-menu__cancel { margin-top: var(--space-3); font-size: var(--text-xs); color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+  .account-menu__cancel:hover { color: var(--ivory); }
+</style>
+</head>
+<body>
+<div id="dv-nav"></div>
+
+<main>
+  <div class="container" id="dashRoot"></div>
+</main>
+
+<div id="dv-footer"></div>
+
+<script src="js/gate.js"></script>
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/app.js"></script>
+<script>
+  if (!DVAuth.isSignedIn()) {
+    window.location.href = "signin.html?next=dashboard.html";
+  }
+
+  const session = DVAuth.getSession();
+  const isMember = DVAuth.isMember();
+  const root = document.getElementById("dashRoot");
+
+  if (isMember) {
+    root.innerHTML = `
+      <div class="backroom-head">
+        <div>
+          <img class="backroom-head__logo" src="assets/dettyverse-logo.webp" alt="DettyVerse" />
+          <div class="backroom-head__tag" style="margin-top:8px;">Private Archive</div>
+        </div>
+        <div class="account-menu">
+          <button class="account-menu__trigger" id="accountTrigger">Account</button>
+          <div class="account-menu__panel" id="accountPanel">
+            <div class="account-menu__row"><span>Email</span><span>${session.email}</span></div>
+            <div class="account-menu__row"><span>Plan</span><span>${session.membership.plan}</span></div>
+            <div class="account-menu__row"><span>Renews</span><span>${new Date(session.membership.expiry).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})}</span></div>
+            <button class="account-menu__cancel" id="cancelBtn">Cancel Membership</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-strip-label" style="margin:0 0 var(--space-3);"><span>Photos</span></div>
+      <div class="rhythm-grid" id="dashPhotoGrid"></div>
+
+      <div class="home-strip-label"><span>Clips</span></div>
+      <div class="clip-wall" id="dashClipWall"></div>
+
+      <div class="home-strip-label"><span>Stories</span></div>
+      <div class="story-grid" id="dashStoryGrid" style="margin-bottom: var(--space-7);"></div>
+    `;
+
+    document.getElementById("dashPhotoGrid").innerHTML = DV.photos.map((p, i) => DVApp.photoCardHtml(p, i)).join("");
+    document.getElementById("dashClipWall").innerHTML = DV.films.map(f => DVApp.clipCardHtml(f)).join("");
+    document.getElementById("dashStoryGrid").innerHTML = DV.stories.map(s => DVApp.storyCardHtml(s)).join("");
+
+    document.querySelectorAll("#dashPhotoGrid .media-card:not(.media-card--locked)").forEach((card) => {
+      card.addEventListener("click", (e) => {
+        e.preventDefault();
+        const id = card.dataset.id;
+        const idx = DV.photos.findIndex(p => p.id === id);
+        DVApp.openLightbox(DV.photos, idx);
+      });
+    });
+
+    const trigger = document.getElementById("accountTrigger");
+    const panel = document.getElementById("accountPanel");
+    trigger.addEventListener("click", () => panel.classList.toggle("is-open"));
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".account-menu")) panel.classList.remove("is-open");
+    });
+    document.getElementById("cancelBtn").addEventListener("click", () => {
+      if (confirm("Cancel your DettyVerse membership?")) {
+        DVAuth.cancelMembership();
+        DVApp.toast("Membership cancelled");
+        setTimeout(() => window.location.reload(), 700);
+      }
+    });
+  } else {
+    root.innerHTML = `
+      <div class="backroom-head">
+        <img class="backroom-head__logo" src="assets/dettyverse-logo.webp" alt="DettyVerse" />
+      </div>
+      <div class="locked-room" style="min-height: 60vh; margin-bottom: var(--space-8);">
+        <div class="locked-room__bg"><img src="https://images.unsplash.com/photo-1483118714900-540cf339fd46?q=80&w=1600" alt="" /></div>
+        <div class="locked-room__content">
+          <div class="locked-room__eyebrow">Not Yet a Member</div>
+          <h2 class="locked-room__title">You're signed in, but not inside.</h2>
+          <div class="locked-room__price">$99.99 <span>/ Month</span></div>
+          <a href="membership.html" class="btn btn--primary">Enter the Verse</a>
+        </div>
+      </div>
+    `;
+  }
+</script>
+</body>
+</html>

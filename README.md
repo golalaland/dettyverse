@@ -1,75 +1,113 @@
-# DETTYVERSE — Frontend Prototype
+# DETTYVERSE — Prototype (v2)
 
-**Private. Cinematic. Nocturnal. Luxurious. Personal. Cultural. Slightly Dangerous.**
+A working frontend prototype of DETTYVERSE: a private, members-only
+visual archive — photos, clips and stories — with a $99.99/month
+membership. Content-first, black canvas, neon red/pink brand identity
+built from the official logo asset.
 
-A complete self-contained frontend prototype of a private cultural publication / membership platform.
+## Running it
 
-## Quick Start
-
-Open `index.html` in a modern browser, or serve the folder:
-
-```bash
-cd dettyverse
-python3 -m http.server 8080
-# → http://localhost:8080
-```
-
-No build step. No dependencies beyond CDN Tailwind + Google Fonts.
-
-## What’s Included
-
-| Surface | Status |
-|---------|--------|
-| Homepage | Atmospheric hero, selected work, membership invitation |
-| Archive | Filterable index of all public + private items |
-| Photography | Series grid with locked states |
-| Film | Editorial film list with stills + simulated playback |
-| Journal / Stories | Editorial writing with private entries |
-| Content Detail | Full photo sets, film pages, journal articles |
-| Membership | $99.99 / 1 MONTH — prominent, tasteful |
-| Locked Content | Consistent private gate with CTA |
-| Member Dashboard | Status, unlocked counts, recent private work |
-| Creator / About | Bio and positioning |
-| Digital Store | Editions with member pricing |
-| Admin Dashboard | Content overview + integration notes |
-| Auth Simulation | Visitor / Member / Admin states (localStorage) |
-| Responsive | Mobile-first navigation and layouts |
-
-## Simulated Auth
-
-- Click **Enter** in the nav (or mobile menu).
-- **Sign In as Member** → full access to private material.
-- **Continue as Visitor** → public only.
-- **Sign In as Admin (demo)** → admin dashboard + full access.
-- Membership purchase flow is also simulated (no real payment).
-
-State persists in `localStorage` under `dettyverse_state`.
-
-## Architecture Notes (for evolution)
+No build step. Open `index.html` directly in a browser, or serve the
+folder with any static server:
 
 ```
-js/
-  data.js     → Editorial content shape (swap for CMS / API later)
-  state.js    → Auth & membership state (replace with real JWT / session)
-  router.js   → Lightweight hash router
-  app.js      → Page renderers + UI bindings
+python3 -m http.server 8000
 ```
 
-**Clear integration points:**
+Then visit `http://localhost:8000`.
 
-1. **Auth** — `State.login` / `State.logout` / `State.user`
-2. **Payments** — Membership CTA + store “Acquire” buttons
-3. **Protected media** — Locked items already gate on `State.canAccess()`
-4. **CMS** — `DETTY` object in `data.js` is the content contract
+## Pages
 
-## Creative Direction
+| Page | File |
+|---|---|
+| Homepage (logo splash → straight into the gallery) | `index.html` |
+| Photos (curated rhythm grid, filterable, fullscreen viewer) | `photos.html` |
+| Clips (native-aspect-ratio video wall — portrait stays portrait) | `clips.html` |
+| Stories (minimal grid) | `stories.html` |
+| Content detail (photo / clip / story — handles the paywall) | `content.html?type=photo\|film\|story&id=...` |
+| Members landing ("Some things aren't public.") | `membership.html` |
+| Sign in / create account (simulated) | `signin.html` |
+| Checkout (simulated payment) | `checkout.html` |
+| Member dashboard ("the back room") | `dashboard.html` |
+| About / Creator | `about.html` |
+| Store — not in main nav, linked from footer | `store.html` |
+| Product detail | `product.html?id=...` |
+| Creator/admin dashboard | `admin.html` |
 
-- Black environment, crimson / ruby accents
-- Cormorant Garamond (editorial serif) + Space Grotesk / Inter
-- Film grain overlay, subtle ambient red glow
-- No sterile portfolio feel — private cultural universe
-- Public surface vs larger private ledger is the core tension
+## Brand assets
 
----
+- `assets/dettyverse-logo.webp` — the official logo, trimmed to its
+  bounding box, used untouched everywhere the wordmark appears (nav,
+  footer, splash, auth pages, admin sidebar). Never recolored, never
+  boxed, never re-glowed.
+- Favicon is a small abbreviated mark (a neon dot on black), inlined
+  as an SVG data URI in every page's `<head>` — the full script
+  wordmark doesn't read at favicon size, so this stands in per the
+  brief's instruction to use a tasteful abbreviated mark for very
+  small applications.
+- Brand palette lives in `css/tokens.css` (`--brand-1/2/3`, `--glow-*`)
+  — pulled directly from the logo's gradient.
 
-Prototype only. Frontend complete. Ready to grow into a real platform.
+## Architecture
+
+- `css/tokens.css` — design tokens (color, type, spacing, motion)
+- `css/base.css` — reset + global styles + grain overlay
+- `css/components.css` — every reusable component: nav, rhythm grid
+  (Photos), clip wall (Clips), cards, the subtle "Private" lock
+  treatment, fullscreen viewer, forms, admin table, etc.
+- `js/data.js` — the mock content database (photos, clips, stories,
+  products). **This is the file to point at a real API/CMS.** Clips
+  carry an `orientation` field (`portrait` / `landscape` / `square`)
+  that drives the wall layout — keep populating this correctly and
+  the wall keeps working without any other changes.
+- `js/auth.js` — simulated membership/session state in `localStorage`,
+  used only to drive the prototype's UI states. Zero real security
+  value — see the TODOs inside.
+- `js/nav.js` — injects the shared nav + footer (logo, five links,
+  one account control) into every page.
+- `js/app.js` — toast messages, fullscreen photo viewer, and the card
+  renderers for photos/clips/stories, including the rhythm-pattern
+  assigner for the Photos grid.
+- `js/gate.js` — the discreet entry/age-confirmation gate.
+
+## Simulating membership states
+
+Open the browser console and run:
+
+```js
+DVAuth.signIn("you@example.com");
+DVAuth.becomeMember();
+DVAuth.cancelMembership();
+DVAuth.signOut();
+```
+
+Or just use the real flow: Sign In → Members → Checkout, all in the UI.
+
+## The private-content treatment
+
+Per the current design direction, locked content stays visible — a
+photo is only lightly blurred/darkened with a small glowing "Private"
+label in the corner, not covered by a paywall box. This lives in
+`.media-card--locked` in `components.css` and the `lockMarkup()`
+helper in `app.js`. If you want it more or less tantalizing, that's
+the one place to tune it.
+
+## What's real vs. simulated
+
+Everything you can click works at the frontend level. None of it is
+backed by a real server. Search each JS/HTML file for `TODO(backend)`
+for the specific integration points:
+
+- **Auth** is a `localStorage` flag. Replace with real session/JWT auth.
+- **Payments** are simulated in `checkout.html` / `product.html`.
+  Replace with Stripe (or similar) — card data should never touch
+  your own server directly.
+- **Membership state** must ultimately be verified server-side on
+  every request for protected media. Never trust the client-side
+  `isMember()` check for anything but UI.
+- **Protected media** should be served via short-lived signed URLs
+  generated only after server-side verification — not exposed at
+  predictable public URLs.
+- **Admin dashboard** (`admin.html`) is static/mock and has no auth
+  gate at all in this prototype — it must sit behind real creator-only
+  auth in production.
