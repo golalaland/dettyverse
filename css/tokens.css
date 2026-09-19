@@ -1,0 +1,81 @@
+/* ============================================
+   DETTYVERSE — DESIGN TOKENS (v2)
+   Brand palette derived from the official logo asset.
+   ============================================ */
+
+:root {
+  /* Canvas */
+  --black: #060607;
+  --surface: #101012;
+  --surface-raised: #17171a;
+  --surface-line: #232326;
+
+  /* Brand — neon red/pink, used as light, not paint */
+  --brand-1: #FF2050;
+  --brand-2: #FF0844;
+  --brand-3: #C2005F;
+  --glow-1: #FF0055;
+  --glow-2: #FF0F5C;
+  --glow-3: #FF2D6B;
+  --glow-4: #FF5C85;
+  --glow-tint: #FFE3EC;
+  --brand: #FF0844; /* representative brand red, for solid fills */
+
+  /* Text */
+  --ivory: #F2F0EC;
+  --ivory-dim: #B7B3AE;
+  --muted: #726F6C;
+  --muted-dark: #45433F;
+
+  /* Type */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Type scale */
+  --text-xs: 0.6875rem;
+  --text-sm: 0.8125rem;
+  --text-base: 1rem;
+  --text-md: 1.25rem;
+  --text-lg: 1.75rem;
+  --text-xl: 2.5rem;
+  --text-2xl: 3.5rem;
+  --text-3xl: 5rem;
+  --text-4xl: 7rem;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2.5rem;
+  --space-6: 4rem;
+  --space-7: 6rem;
+  --space-8: 9rem;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 180ms;
+  --dur-med: 420ms;
+  --dur-slow: 900ms;
+
+  /* Effects */
+  --glow-brand: 0 0 40px rgba(255, 8, 68, 0.35);
+  --glow-soft: 0 0 90px rgba(255, 8, 68, 0.14);
+  --gradient-brand: linear-gradient(135deg, var(--brand-1), var(--brand-2) 55%, var(--brand-3));
+  --radius-sm: 2px;
+  --radius-md: 3px;
+
+  /* Layout */
+  --edge: clamp(1.25rem, 4vw, 4rem);
+  --max-width: 1680px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
