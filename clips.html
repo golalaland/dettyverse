@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clips · DETTYVERSE</title>
+  <link rel="icon" type="image/webp" href="https://raw.githubusercontent.com/golalaland/dettyverse/main/assets/dettyverse_neon_red_transparent_1418px.webp" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #000000; --bg-soft: #050505; --red: #FF0844; --red-bright: #FF2050;
+      --red-deep: #C2005F; --glow: #FF0055; --glow-soft: #FF2D6B; --pink-soft: #FFE3EC;
+      --text: #e8e8e8; --text-dim: #888888; --text-muted: #555555;
+      --border: rgba(255, 255, 255, 0.06);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif; font-weight: 300;
+      line-height: 1.5; overflow-x: hidden; -webkit-font-smoothing: antialiased;
+    }
+    #loader {
+      position: fixed; inset: 0; background: #000; z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.9s ease, visibility 0.9s ease;
+    }
+    #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    #loader img { width: min(280px, 60vw); height: auto; opacity: 0; animation: logoIn 1.2s ease 0.15s forwards; }
+    @keyframes logoIn {
+      0% { opacity: 0; transform: scale(0.96); filter: blur(6px); }
+      100% { opacity: 1; transform: scale(1); filter: blur(0); }
+    }
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 2.5rem;
+      background: rgba(0,0,0,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo-link { display: block; line-height: 0; }
+    .logo-link img { height: 42px; width: auto; max-width: 260px; display: block; }
+    @media (max-width: 768px) { .logo-link img { height: 34px; max-width: 210px; } }
+    nav { display: flex; align-items: center; gap: 2.25rem; }
+    nav a {
+      color: var(--text-dim); text-decoration: none; font-size: 0.7rem; font-weight: 400;
+      letter-spacing: 0.18em; text-transform: uppercase; transition: color 0.25s ease;
+    }
+    nav a:hover, nav a.active { color: var(--text); }
+    .header-right { display: flex; align-items: center; gap: 1.5rem; }
+    .btn-enter {
+      color: var(--red); text-decoration: none; font-size: 0.7rem; font-weight: 400;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      border: 1px solid rgba(255, 8, 68, 0.4); padding: 0.45rem 1rem; transition: all 0.25s ease;
+    }
+    .btn-enter:hover {
+      background: rgba(255, 8, 68, 0.12); border-color: var(--red);
+      box-shadow: 0 0 20px rgba(255, 8, 68, 0.25);
+    }
+    .menu-toggle {
+      display: none; background: none; border: none; color: var(--text);
+      font-size: 0.7rem; letter-spacing: 0.15em; cursor: pointer; text-transform: uppercase;
+    }
+    .mobile-nav {
+      display: none; position: fixed; inset: 0; background: #000; z-index: 99;
+      flex-direction: column; align-items: center; justify-content: center; gap: 2rem;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      color: var(--text-dim); text-decoration: none; font-size: 0.85rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+    }
+    .mobile-nav a:hover { color: var(--text); }
+
+    main { padding-top: 5.5rem; }
+    .page-header {
+      padding: 2rem 2.5rem 1.5rem; max-width: 1400px; margin: 0 auto;
+    }
+    .page-header h1 {
+      font-family: 'Cormorant Garamond', serif; font-weight: 300;
+      font-size: clamp(2rem, 4vw, 2.8rem); letter-spacing: 0.02em; margin-bottom: 0.35rem;
+    }
+    .page-header p {
+      font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-muted);
+    }
+
+    /* FEATURED */
+    .featured {
+      max-width: 1400px; margin: 0 auto 3rem; padding: 0 1.5rem;
+    }
+    .featured-card {
+      position: relative; aspect-ratio: 16/9; overflow: hidden;
+      background: #0a0a0a; cursor: pointer;
+    }
+    .featured-card img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.8s ease;
+    }
+    .featured-card:hover img { transform: scale(1.03); }
+    .featured-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 55%);
+      display: flex; flex-direction: column; justify-content: flex-end; padding: 2rem;
+    }
+    .featured-play {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 64px; height: 64px; border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s ease;
+    }
+    .featured-play::after {
+      content: ''; width: 0; height: 0;
+      border-left: 16px solid #fff; border-top: 10px solid transparent; border-bottom: 10px solid transparent;
+      margin-left: 4px;
+    }
+    .featured-card:hover .featured-play {
+      border-color: var(--red); box-shadow: 0 0 30px rgba(255, 8, 68, 0.35);
+    }
+    .featured-meta h2 {
+      font-family: 'Cormorant Garamond', serif; font-weight: 300;
+      font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 0.4rem;
+    }
+    .featured-meta p {
+      font-size: 0.9rem; color: var(--text-dim); max-width: 480px; margin-bottom: 0.75rem;
+    }
+    .featured-meta span {
+      font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted);
+    }
+
+    /* SECTION LABELS */
+    .section-label {
+      padding: 2.5rem 1.5rem 1.25rem; max-width: 1400px; margin: 0 auto;
+      font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-muted);
+    }
+
+    /* VIDEO GRID */
+    .video-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem; padding: 0 1.5rem 4rem; max-width: 1400px; margin: 0 auto;
+    }
+    .video-card {
+      position: relative; cursor: pointer; transition: opacity 0.3s;
+    }
+    .video-card:hover { opacity: 0.92; }
+    .video-thumb {
+      position: relative; aspect-ratio: 16/9; overflow: hidden; background: #0a0a0a; margin-bottom: 0.85rem;
+    }
+    .video-thumb img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.6s ease;
+    }
+    .video-card:hover .video-thumb img { transform: scale(1.04); }
+    .video-play {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 44px; height: 44px; border: 1px solid rgba(255,255,255,0.45);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.3s, border-color 0.3s;
+    }
+    .video-play::after {
+      content: ''; width: 0; height: 0;
+      border-left: 11px solid #fff; border-top: 7px solid transparent; border-bottom: 7px solid transparent;
+      margin-left: 3px;
+    }
+    .video-card:hover .video-play { opacity: 1; border-color: rgba(255,255,255,0.8); }
+    .video-duration {
+      position: absolute; bottom: 0.5rem; right: 0.5rem;
+      background: rgba(0,0,0,0.75); padding: 0.2rem 0.45rem;
+      font-size: 0.6rem; letter-spacing: 0.08em; color: var(--text);
+    }
+    .video-info h3 {
+      font-size: 0.95rem; font-weight: 400; margin-bottom: 0.3rem; letter-spacing: 0.01em;
+    }
+    .video-info p {
+      font-size: 0.8rem; color: var(--text-dim); line-height: 1.45; margin-bottom: 0.4rem;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .video-info .meta {
+      font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted);
+    }
+
+    /* VIEWER */
+    #viewer {
+      position: fixed; inset: 0; background: #000; z-index: 200;
+      display: none; align-items: center; justify-content: center; flex-direction: column;
+    }
+    #viewer.open { display: flex; }
+    #viewer video, #viewer img {
+      max-width: 92vw; max-height: 82vh; object-fit: contain; display: block;
+    }
+    .viewer-close {
+      position: absolute; top: 1.5rem; right: 1.75rem; background: none; border: none;
+      color: var(--text-dim); font-size: 0.7rem; letter-spacing: 0.18em;
+      text-transform: uppercase; cursor: pointer; z-index: 10; transition: color 0.2s;
+    }
+    .viewer-close:hover { color: var(--text); }
+    .viewer-meta {
+      position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+      font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--text-muted); text-align: center; max-width: 90%;
+    }
+    .viewer-meta strong { display: block; color: var(--text); font-weight: 400; margin-bottom: 0.25rem; font-size: 0.75rem; letter-spacing: 0.1em; }
+
+    footer {
+      padding: 3rem 2.5rem; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;
+    }
+    footer .footer-logo img { height: 22px; width: auto; opacity: 0.7; }
+    footer .footer-links { display: flex; gap: 1.75rem; flex-wrap: wrap; }
+    footer .footer-links a {
+      font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none; transition: color 0.25s;
+    }
+    footer .footer-links a:hover { color: var(--text); }
+    footer .copyright { font-size: 0.6rem; letter-spacing: 0.15em; color: var(--text-muted); text-transform: uppercase; }
+
+    @media (max-width: 900px) {
+      header { padding: 1rem 1.25rem; }
+      nav { display: none; }
+      .menu-toggle { display: block; }
+      .page-header { padding: 1.5rem 1.25rem 1rem; }
+      .featured { padding: 0 1rem; margin-bottom: 2rem; }
+      .video-grid { grid-template-columns: 1fr; gap: 1.25rem; padding: 0 1rem 3rem; }
+      .section-label { padding: 2rem 1rem 1rem; }
+      footer { padding: 2rem 1.25rem; flex-direction: column; gap: 1rem; text-align: center; }
+      footer .footer-links { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div id="loader">
+    <img src="https://raw.githubusercontent.com/golalaland/dettyverse/main/assets/dettyverse_neon_red_transparent_1418px.webp" alt="DETTYVERSE" />
+  </div>
+
+  <header id="header">
+    <a href="index.html" class="logo-link">
+      <img src="https://raw.githubusercontent.com/golalaland/dettyverse/main/assets/dettyverse_neon_red_transparent_1418px.webp" alt="DETTYVERSE" />
+    </a>
+    <nav>
+      <a href="photos.html">Photos</a>
+      <a href="clips.html" class="active">Clips</a>
+      <a href="shorties.html">Shorties</a>
+      <a href="stories.html">Stories</a>
+    </nav>
+    <div class="header-right">
+      <a href="members.html" class="btn-enter">Enter</a>
+      <button class="menu-toggle" id="menuToggle">Menu</button>
+    </div>
+  </header>
+
+  <div class="mobile-nav" id="mobileNav">
+    <a href="photos.html" onclick="closeMobile()">Photos</a>
+    <a href="clips.html" onclick="closeMobile()">Clips</a>
+    <a href="shorties.html" onclick="closeMobile()">Shorties</a>
+    <a href="stories.html" onclick="closeMobile()">Stories</a>
+    <a href="members.html" onclick="closeMobile()">Members</a>
+    <a href="about.html" onclick="closeMobile()">About</a>
+    <a href="login.html" onclick="closeMobile()" style="margin-top:1rem;color:var(--red)">Login</a>
+  </div>
+
+  <main>
+    <div class="page-header">
+      <h1>Clips</h1>
+      <p>Cinematic Archive</p>
+    </div>
+
+    <!-- FEATURED -->
+    <div class="featured">
+      <div class="featured-card" onclick="openViewer(0)">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1600&q=80" alt="" />
+        <div class="featured-overlay">
+          <div class="featured-play"></div>
+          <div class="featured-meta">
+            <h2>Red Hour</h2>
+            <p>A cinematic night sequence through the city. Soft neon, deep black, motion as memory.</p>
+            <span>01:12 · March 2026 · Landscape</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">Latest</div>
+    <div class="video-grid">
+      <div class="video-card" onclick="openViewer(1)">
+        <div class="video-thumb">
+          <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=900&q=80" alt="" loading="lazy" />
+          <div class="video-play"></div>
+          <span class="video-duration">0:48</span>
+        </div>
+        <div class="video-info">
+          <h3>Still Frame</h3>
+          <p>Quiet moments held between movements. Light, shadow, and the pause that defines both.</p>
+          <div class="meta">Feb 2026 · 1.2K views</div>
+        </div>
+      </div>
+      <div class="video-card" onclick="openViewer(2)">
+        <div class="video-thumb">
+          <img src="https://images.unsplash.com/photo-1618005182384-a83b0c7b0d0e?w=900&q=80" alt="" loading="lazy" />
+          <div class="video-play"></div>
+          <span class="video-duration">1:05</span>
+        </div>
+        <div class="video-info">
+          <h3>Midnight Motion</h3>
+          <p>Extended cut of the nocturnal study. Landscape framing for full immersion.</p>
+          <div class="meta">Feb 2026 · 890 views</div>
+        </div>
+      </div>
+      <div class="video-card" onclick="openViewer(3)">
+        <div class="video-thumb">
+          <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=900&q=80" alt="" loading="lazy" />
+          <div class="video-play"></div>
+          <span class="video-duration">2:14</span>
+        </div>
+        <div class="video-info">
+          <h3>Edge of Light</h3>
+          <p>Where the city ends and the dark begins. A slow walk through residual glow.</p>
+          <div class="meta">Jan 2026 · 2.4K views</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">Most Watched</div>
+    <div class="video-grid">
+      <div class="video-card" onclick="openViewer(0)">
+        <div class="video-thumb">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=900&q=80" alt="" loading="lazy" />
+          <div class="video-play"></div>
+          <span class="video-duration">1:12</span>
+        </div>
+        <div class="video-info">
+          <h3>Red Hour</h3>
+          <p>A cinematic night sequence through the city. Soft neon, deep black.</p>
+          <div class="meta">Mar 2026 · 4.1K views</div>
+        </div>
+      </div>
+      <div class="video-card" onclick="openViewer(3)">
+        <div class="video-thumb">
+          <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=900&q=80" alt="" loading="lazy" />
+          <div class="video-play"></div>
+          <span class="video-duration">2:14</span>
+        </div>
+        <div class="video-info">
+          <h3>Edge of Light</h3>
+          <p>Where the city ends and the dark begins.</p>
+          <div class="meta">Jan 2026 · 2.4K views</div>
+        </div>
+      </div>
+      <div class="video-card" onclick="openViewer(1)">
+        <div class="video-thumb">
+          <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=900&q=80" alt="" loading="lazy" />
+          <div class="video-play"></div>
+          <span class="video-duration">0:48</span>
+        </div>
+        <div class="video-info">
+          <h3>Still Frame</h3>
+          <p>Quiet moments held between movements.</p>
+          <div class="meta">Feb 2026 · 1.2K views</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">Archive</div>
+    <div class="video-grid">
+      <div class="video-card" onclick="openViewer(4)">
+        <div class="video-thumb">
+          <img src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=900&q=80" alt="" loading="lazy" />
+          <div class="video-play"></div>
+          <span class="video-duration">0:56</span>
+        </div>
+        <div class="video-info">
+          <h3>Portrait Sequence</h3>
+          <p>Study in light and presence. Landscape extension of a quieter moment.</p>
+          <div class="meta">Dec 2025 · 670 views</div>
+        </div>
+      </div>
+      <div class="video-card" onclick="openViewer(5)">
+        <div class="video-thumb">
+          <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=900&q=80" alt="" loading="lazy" />
+          <div class="video-play"></div>
+          <span class="video-duration">1:30</span>
+        </div>
+        <div class="video-info">
+          <h3>After Hours</h3>
+          <p>The city after the public has left. Residual energy and empty frames.</p>
+          <div class="meta">Nov 2025 · 1.1K views</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <a href="index.html" class="footer-logo">
+      <img src="https://raw.githubusercontent.com/golalaland/dettyverse/main/assets/dettyverse_neon_red_transparent_1418px.webp" alt="DETTYVERSE" />
+    </a>
+    <div class="footer-links">
+      <a href="photos.html">Photos</a>
+      <a href="clips.html">Clips</a>
+      <a href="shorties.html">Shorties</a>
+      <a href="stories.html">Stories</a>
+      <a href="members.html">Members</a>
+      <a href="about.html">About</a>
+      <a href="login.html">Login</a>
+    </div>
+    <span class="copyright">© 2026</span>
+  </footer>
+
+  <div id="viewer">
+    <button class="viewer-close" onclick="closeViewer()">Close</button>
+    <img id="viewerImg" src="" alt="" />
+    <div class="viewer-meta" id="viewerMeta"></div>
+  </div>
+
+  <script>
+    window.addEventListener('load', () => {
+      setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1200);
+    });
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileNav = document.getElementById('mobileNav');
+    menuToggle.addEventListener('click', () => {
+      mobileNav.classList.toggle('open');
+      menuToggle.textContent = mobileNav.classList.contains('open') ? 'Close' : 'Menu';
+    });
+    function closeMobile() {
+      mobileNav.classList.remove('open');
+      menuToggle.textContent = 'Menu';
+    }
+
+    const clips = [
+      { src: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1600&q=90', title: 'Red Hour', meta: '01:12 · March 2026 · Landscape' },
+      { src: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1400&q=90', title: 'Still Frame', meta: '0:48 · February 2026 · Landscape' },
+      { src: 'https://images.unsplash.com/photo-1618005182384-a83b0c7b0d0e?w=1400&q=90', title: 'Midnight Motion', meta: '1:05 · February 2026 · Landscape' },
+      { src: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1400&q=90', title: 'Edge of Light', meta: '2:14 · January 2026 · Landscape' },
+      { src: 'https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=1400&q=90', title: 'Portrait Sequence', meta: '0:56 · December 2025 · Landscape' },
+      { src: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=1400&q=90', title: 'After Hours', meta: '1:30 · November 2025 · Landscape' },
+    ];
+
+    function openViewer(index) {
+      const item = clips[index];
+      document.getElementById('viewerImg').src = item.src;
+      document.getElementById('viewerMeta').innerHTML = `<strong>${item.title}</strong>${item.meta}`;
+      document.getElementById('viewer').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeViewer() {
+      document.getElementById('viewer').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', (e) => {
+      if (!document.getElementById('viewer').classList.contains('open')) return;
+      if (e.key === 'Escape') closeViewer();
+    });
+  </script>
+</body>
+</html>

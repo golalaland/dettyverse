@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Verse · DETTYVERSE</title>
+  <link rel="icon" type="image/webp" href="https://raw.githubusercontent.com/golalaland/dettyverse/main/assets/dettyverse_neon_red_transparent_1418px.webp" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #000000; --bg-soft: #050505; --red: #FF0844; --red-bright: #FF2050;
+      --red-deep: #C2005F; --glow: #FF0055; --glow-soft: #FF2D6B; --pink-soft: #FFE3EC;
+      --text: #e8e8e8; --text-dim: #888888; --text-muted: #555555;
+      --border: rgba(255, 255, 255, 0.06);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif; font-weight: 300;
+      line-height: 1.5; min-height: 100vh; -webkit-font-smoothing: antialiased;
+    }
+    #loader {
+      position: fixed; inset: 0; background: #000; z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.9s ease, visibility 0.9s ease;
+    }
+    #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    #loader img { width: min(280px, 60vw); height: auto; opacity: 0; animation: logoIn 1.2s ease 0.15s forwards; }
+    @keyframes logoIn {
+      0% { opacity: 0; transform: scale(0.96); filter: blur(6px); }
+      100% { opacity: 1; transform: scale(1); filter: blur(0); }
+    }
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 2.5rem;
+      background: rgba(0,0,0,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo-link { display: block; line-height: 0; }
+    .logo-link img { height: 42px; width: auto; max-width: 260px; display: block; }
+    @media (max-width: 768px) { .logo-link img { height: 34px; max-width: 210px; } }
+    .header-right a {
+      font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-dim); text-decoration: none; transition: color 0.25s;
+    }
+    .header-right a:hover { color: var(--text); }
+
+    main {
+      padding: 8rem 2rem 5rem; max-width: 560px; margin: 0 auto;
+    }
+    .page-label {
+      font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 1rem;
+    }
+    h1 {
+      font-family: 'Cormorant Garamond', serif; font-weight: 300;
+      font-size: clamp(2rem, 4vw, 2.6rem); margin-bottom: 2.5rem;
+    }
+    .status-card {
+      border: 1px solid var(--border); padding: 1.75rem; margin-bottom: 2.5rem;
+    }
+    .status-card .label {
+      font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 0.5rem;
+    }
+    .status-card .value {
+      font-size: 1.1rem; color: var(--text); margin-bottom: 0.35rem;
+    }
+    .status-card .sub {
+      font-size: 0.8rem; color: var(--text-dim);
+    }
+    .status-active { color: var(--red); }
+
+    .section-label {
+      font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 1rem;
+    }
+    .access-links {
+      display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 3rem;
+    }
+    .access-links a {
+      display: block; padding: 1rem 1.25rem;
+      border: 1px solid var(--border); color: var(--text);
+      text-decoration: none; font-size: 0.8rem; letter-spacing: 0.12em;
+      text-transform: uppercase; transition: all 0.25s;
+    }
+    .access-links a:hover {
+      border-color: rgba(255, 8, 68, 0.4); color: var(--red);
+    }
+
+    .account-actions {
+      display: flex; flex-direction: column; gap: 0.75rem;
+    }
+    .account-actions a {
+      font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none; transition: color 0.25s;
+    }
+    .account-actions a:hover { color: var(--text); }
+    .account-actions a.signout { color: var(--red); }
+
+    @media (max-width: 600px) {
+      header { padding: 1rem 1.25rem; }
+      main { padding: 7rem 1.25rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="loader">
+    <img src="https://raw.githubusercontent.com/golalaland/dettyverse/main/assets/dettyverse_neon_red_transparent_1418px.webp" alt="DETTYVERSE" />
+  </div>
+
+  <header>
+    <a href="index.html" class="logo-link">
+      <img src="https://raw.githubusercontent.com/golalaland/dettyverse/main/assets/dettyverse_neon_red_transparent_1418px.webp" alt="DETTYVERSE" />
+    </a>
+    <div class="header-right">
+      <a href="index.html">Home</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-label">Member</div>
+    <h1>Your Verse</h1>
+
+    <div class="status-card">
+      <div class="label">Membership</div>
+      <div class="value status-active">Active</div>
+      <div class="sub">Expires · 20 October 2026</div>
+    </div>
+
+    <div class="section-label">Private Access</div>
+    <div class="access-links">
+      <a href="photos.html">Private Photos</a>
+      <a href="clips.html">Private Clips</a>
+      <a href="shorties.html">Private Shorties</a>
+      <a href="stories.html">Private Stories</a>
+    </div>
+
+    <div class="section-label">Account</div>
+    <div class="account-actions">
+      <a href="#">Account settings</a>
+      <a href="#">Billing</a>
+      <a href="index.html" class="signout">Sign out</a>
+    </div>
+  </main>
+
+  <script>
+    window.addEventListener('load', () => {
+      setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1000);
+    });
+  </script>
+</body>
+</html>
